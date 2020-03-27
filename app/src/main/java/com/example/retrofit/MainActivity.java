@@ -4,6 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+import java.sql.Array;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.Retrofit.Builder;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -11,9 +28,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // b1: create request, class chứa tất cả request của use
+        // create request, class chứa tất cả request của use, gửi request lên server
+        // tạo 1 luồng bên ngoài
         // có bnhiu request thì đưa hết vào 1 cái interface
         // mỗi lần muốn sử dụng tạo 1 cái retrofit
         // sau đó truyền đường dẫn tới server (end point)
+
+        // 1. setup các extension hỗ trợ- retrofit, rx, gson
+        // host https:khoapham.vn
+
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .setLenient()
+                .create();
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(300, TimeUnit.SECONDS)
+                .writeTimeout(300, TimeUnit.SECONDS)
+                .connectTimeout(300,TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                .build();
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://khoapham.vn/KhoaPhamTraining/json/tien/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(okHttpClient)
+                .build();
+
+
+        // 2. khởi tạo retrofit
+        // 3. khởi tạo request
+        // 4. call request
     }
 }
