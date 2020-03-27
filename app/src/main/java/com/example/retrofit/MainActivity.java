@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 1. setup các extension hỗ trợ- retrofit, rx, gson
         // host https:khoapham.vn
-
+        // 1. khởi tạo retrofit
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setLenient()
@@ -59,8 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
 
-        // 2. khởi tạo retrofit
-        // 3. khởi tạo request
+        // 2. khởi tạo interface chứa các request
+// https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json
+        // demo1.json là end point, đường dẫn cuối
+
+
+
+
+
         // 4. call request
     }
 }
