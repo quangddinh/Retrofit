@@ -3,7 +3,9 @@ package com.example.retrofit;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.Demo1;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,6 +14,12 @@ import java.sql.Array;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -62,7 +70,32 @@ public class MainActivity extends AppCompatActivity {
         // 2. khởi tạo interface chứa các request
 // https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json
         // demo1.json là end point, đường dẫn cuối
+        // khởi tạo interface xong rồi giờ sẽ gẵn vào
+        //3.
+        ApiService apiService = retrofit.create(ApiService.class);
+        //4. Gọi request, request trong api server giờ ta call api service về
+        // gọi getData và kiểu dl trả về là Ober
+        apiService.getDataDemo1()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Demo1>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+                    @Override
+                    public void onNext(Demo1 demo1) {
+                        Log.d("BBB",demo1.getWebsite());
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
 
 
