@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.Demo1;
+import com.example.Demo4;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.sql.Array;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         // 1. setup các extension hỗ trợ- retrofit, rx, gson
         // host https:khoapham.vn
         // 1. khởi tạo retrofit
+
+
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setLenient()
@@ -58,34 +62,37 @@ public class MainActivity extends AppCompatActivity {
                 .protocols(Arrays.asList(Protocol.HTTP_1_1))
                 .build();
 
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://khoapham.vn/KhoaPhamTraining/json/tien/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
 
 
+
         // 2. khởi tạo interface chứa các request
-// https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json
+        // https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json
         // demo1.json là end point, đường dẫn cuối
         // khởi tạo interface xong rồi giờ sẽ gẵn vào
         //3.
+
         ApiService apiService = retrofit.create(ApiService.class);
+
         //4. Gọi request, request trong api server giờ ta call api service về
         // gọi getData và kiểu dl trả về là Ober
+
         apiService.getDataDemo1()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Demo1>() {
+
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
                     @Override
                     public void onNext(Demo1 demo1) {
-                        Log.d("BBB",demo1.getWebsite());
+                        Log.d("BBB",demo1.getMonhoc());
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -96,10 +103,28 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+        apiService.getDataDemo4()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Demo4>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+                    @Override
+                    public void onNext(List<Demo4> demo4s) {
+                        Log.d("AAA" , demo4s.get(1).getHocphi());
+                        Log.d("AAA" , demo4s.get(2).getKhoahoc());
+                    }
+                    @Override
+                    public void onError(Throwable e) {
 
+                    }
 
+                    @Override
+                    public void onComplete() {
 
-        // 4. call request
+                    }
+                });
     }
 }

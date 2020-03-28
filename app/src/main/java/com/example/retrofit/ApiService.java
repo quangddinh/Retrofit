@@ -1,26 +1,21 @@
 package com.example.retrofit;
 
 import com.example.Demo1;
+import com.example.Demo4;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 
 public interface ApiService {
-    // trong interface này chứa tất cả các request
-//  https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json
-
-
-
 
     @GET("demo1.json")
     Observable<Demo1> getDataDemo1();
-    // ober sẽ format lại định dạng dl theo ý mình
+
+    @GET("demo4.json")
+    Observable<List<Demo4>> getDataDemo4();
 
 
-
-
-// call rồi nhưng phải tạo 1 kiểu dữ liệu để hứng
-    // 1 hứng về string
-    // 2 hứng object format về thành 1 OOP để dễ gọi
 
 }
